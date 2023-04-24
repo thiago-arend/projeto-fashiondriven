@@ -8,7 +8,7 @@ body {
 
 .header {
     background-color: #404EED;
-    height: 80px;
+    height: 89px;
     padding-left: 60px;
 
     display: flex;
@@ -17,25 +17,73 @@ body {
 
 .main {
     background-color: red;
-    height: 600px;
+    height: 785px;
+    margin-bottom: 40px;
 
     display: flex;
 }
 
 .main .container {
     width: 50%;
-    height: 600;
-}
-
-.ultimos-pedidos {
-    height: 256px;
-    background-color: aqua;
+    height: 785px;
 }
 
 .main .container:nth-child(1){
-    background-color: lightblue;
+    background-color: #E5E5E5;
 }
 
 .main .container:nth-child(2){
-    background-color: lightcoral;
+    background-color: #404EED;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circulo {
+    background-color: #F2F2F2;
+    border: 1px solid #C4C4C4;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    box-shadow: 0px 6px 4px 0px #C4C4C4;
+}
+
+.container-ultimos-pedidos {
+    width: 1060px;
+    margin: 0 auto;
+}
+
+.container-ultimos-pedidos p {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #232323;
+}
+
+.container-ultimos-pedidos span {
+    font-size: 20px;
+    color: #232323;
+}
+
+.container-ultimos-pedidos span span:nth-child(1) {
+    font-weight: bold;
+}
+
+.ultimos-pedidos {
+    height: 342px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.ultimos-pedidos div {
+    width: 200px;
+    height: 236px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }
