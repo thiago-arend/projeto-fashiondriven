@@ -1,0 +1,41 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #F2F2F2;
+}
+
+.header {
+    background-color: #404EED;
+    height: 80px;
+    padding-left: 60px;
+
+    display: flex;
+    align-items: center;
+}
+
+.main {
+    background-color: red;
+    height: 600px;
+
+    display: flex;
+}
+
+.main .container {
+    width: 50%;
+    height: 600;
+}
+
+.ultimos-pedidos {
+    height: 256px;
+    background-color: aqua;
+}
+
+.main .container:nth-child(1){
+    background-color: lightblue;
+}
+
+.main .container:nth-child(2){
+    background-color: lightcoral;
+}
