@@ -5,6 +5,7 @@
 body {
     background-color: #F2F2F2;
     font-family: 'Roboto', sans-serif;
+    color: #232323;
 }
 
 .header {
@@ -29,15 +30,11 @@ body {
 }
 
 .main .container:nth-child(1){
-    background-color: #E5E5E5;
+    background-color: #FCFCFC;
 }
 
 .main .container:nth-child(2){
     background-color: #404EED;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .circulo {
@@ -51,14 +48,18 @@ body {
 
 .main .container .conteudo {
     width: 400px;
-    margin-left: 180px;
     margin-top: 40px;
+}
+
+.container-ultimos-pedidos, 
+.main .container .conteudo
+{
+    margin-left: 180px;
 }
 
 .main .container .conteudo span,
 .main .container .conteudo p {
     font-size: 18px;
-    color: #232323;
     text-shadow: 1px 5px 4px #C4C4C4;
 }
 
@@ -71,7 +72,8 @@ body {
     margin-bottom: 8px;
 }
 
-.main .container .conteudo > div div {
+.main .container .conteudo > div div,
+.ultimos-pedidos div {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -81,12 +83,14 @@ body {
     margin-top: 10px;
 }
 
-.main .container .conteudo > div {
+.main .container .conteudo > div, 
+.ultimos-pedidos {
     display: flex;
     justify-content: space-between;
 }
 
-.main .container .conteudo > div .circulo {
+.main .container .conteudo > div .circulo,
+.main .container:nth-child(2) {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -99,7 +103,6 @@ input {
     padding-left: 15px;
     width: 100%;
     height: 40px;
-    color: #232323;
     background-color: #F2F2F2;
     border: 1px solid #F2F2F2;
     border-radius: 10px;
@@ -132,19 +135,17 @@ button {
 }
 
 .container-ultimos-pedidos {
+    background-color: #F2F2F2;
     width: 1060px;
-    margin-left: 180px;
 }
 
 .container-ultimos-pedidos p {
     margin-bottom: 16px;
     font-size: 24px;
-    color: #232323;
 }
 
 .container-ultimos-pedidos span {
     font-size: 20px;
-    color: #232323;
 }
 
 .container-ultimos-pedidos span span:nth-child(1) {
@@ -153,9 +154,6 @@ button {
 
 .ultimos-pedidos {
     height: 342px;
-
-    display: flex;
-    justify-content: space-between;
 }
 
 .ultimos-pedidos div {
@@ -164,8 +162,5 @@ button {
     background-color: #FFFFFF;
     border-radius: 8px;
 
-    display: flex;
-    flex-direction: column;
     justify-content: space-around;
-    align-items: center;
 }
