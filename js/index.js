@@ -3,38 +3,41 @@ axios.defaults.headers.common['Authorization'] = 'jJo7ORw9ajCoGsHMsNZCQBo7';
 
 // variáveis globais
 let userName;
+const link = document.querySelector("input");
+
+// monitora teclado para atualizar layout do botao
+link.addEventListener(("keyup"), habilitaBotao);
 
 // funções
-function validaMontarRoupa() {
+function habilitaBotao() {
+    const botao = document.querySelector("button");
+
     // validação da montagem da roupa
     const modelo = document.querySelector(".modelo");
     const gola = document.querySelector(".gola");
     const tecido = document.querySelector(".tecido");
 
-    // querySelector devolve null caso nao exista o nodo procurado (null é avaliado como false)
-    if (!modelo.querySelector(".selecionado")
-        || !gola.querySelector(".selecionado") 
-        || !tecido.querySelector(".selecionado")) 
-    {
-
-        alert("Selecione o modelo, a gola e o tecido de sua camiseta!");
-    }
-
-    // validação do input
-    const link = document.querySelector("input");
+    // validação input
     const regex = /^(?:https?:\/\/)?(w{3}\.)?[\w_-]+((\.\w{2,}){1,2})(\/([\w\._-]+\/?)*(\?[\w_-]+=[^\?\/&]*(\&[\w_-]+=[^\?\/&]*)*)?)?$/gm;
     const passouRegex = link.value.match(regex) !== null; // flag guarda true se regex encontrou pelo menos um match
 
-    if (link.value === "") {
-        alert("O link deve ser preenchido para montar a sua roupa!");
-    }
-    else if (link.value === null || link.value === undefined || !passouRegex)
+    // querySelector devolve null caso nao exista o nodo procurado (null é avaliado como false)
+    if (modelo.querySelector(".selecionado")
+        && gola.querySelector(".selecionado") 
+        && tecido.querySelector(".selecionado")
+        && passouRegex) 
     {
-        alert("Link Inválido! Tente novamente!");
+        botao.classList.add("validado");
+        botao.disabled = false;
+    }
+    else
+    {
+        botao.classList.remove("validado");
+        botao.disabled = true;
     }
 }
 
-function efeitosMontarRoupa(elemento){
+function efeitosMontarBlusa(elemento){
     // querySelector devolve null caso nao exista o nodo procurado (null é avaliado como false)
     const selecionado = elemento.querySelector(".selecionado");
     if (selecionado) { // clicou em um item já selecionado
@@ -50,6 +53,9 @@ function efeitosMontarRoupa(elemento){
         // adiciona o efeito apenas no desejado
         elemento.querySelector(".circulo").classList.toggle("selecionado");
     }
+
+    // atualiza o layout do botao
+    habilitaBotao();
 }
 
 function fazerLogin() {
@@ -57,7 +63,7 @@ function fazerLogin() {
 }
 
 function montarBlusa() {
-    validaMontarRoupa();
+    console.log('clicou')
 }
 
 fazerLogin();
