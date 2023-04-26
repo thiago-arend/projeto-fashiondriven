@@ -1,7 +1,7 @@
 // configuração axios
 axios.defaults.headers.common['Authorization'] = 'jJo7ORw9ajCoGsHMsNZCQBo7';
 const urlGET = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
-const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirt";
+const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
 
 // variáveis globais
 let userName;                                        // nome usuário
@@ -131,16 +131,15 @@ function removeEfeitosTextoGenerico(tipoMensagem) {
     }
 }
 
-function renderizaErroPedido(status) {
+function renderizaErroPedido(mensagem) {
     const container = document.querySelector(".conteudo");
     const conteudoAntes = container.innerHTML;
-    const conteudoInputAntes = link.value;
     
     container.innerHTML = "";
     let templateErroPedido = `
     <div class="container-status-pedido-erro">
         <h1>Algo deu errado!</h1>
-        <div><span class="status-erro">Um passarinho me contou que a imagem não é válida. Tente novamente!</span></div>
+        <div><span class="status-erro">${mensagem}</span></div>
         <div><img src="./images/Blusa-erro.png" alt=""></div>
         <div><span class="timer">Voltando para a página principal em 10s</span></div>
     </div>`;
@@ -214,8 +213,7 @@ function montarBlusa() {
         nomesItens.push(textoSpan);
     });
     const nomesItensTraduzidos = nomesItens.map((n) => traduzNome(n));
-
-    const camiseta = { 
+    const camiseta = {
                     "model": nomesItensTraduzidos[0], 
                     "neck": nomesItensTraduzidos[1], 
                     "material": nomesItensTraduzidos[2], 
@@ -225,12 +223,15 @@ function montarBlusa() {
 
     // construção da requisição
     const promise = axios.post(urlPOST, camiseta);
-    promise.then((res) => {
-        renderizaSucessoPedido(res.data.image);
-    });
+    promise.then((res) => { renderizaSucessoPedido(res.data.image) });
     promise.catch((erro) => {
-        console.log(erro);
-        renderizaErroPedido(erro.response.status);
+        const codigo = erro.response.status;
+        let mensagem = "";
+        if (codigo === 422)
+            mensagem = "Parece que algum campo não foi preenchido da maneira correta. Tente novamente!";
+        else
+            mensagem = "Estamos enfrentando alguns problemas internos. Tente novamente mais tarde!"
+        renderizaErroPedido(mensagem);
     });
 }
 
