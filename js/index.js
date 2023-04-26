@@ -1,14 +1,20 @@
 // configuração axios
 axios.defaults.headers.common['Authorization'] = 'jJo7ORw9ajCoGsHMsNZCQBo7';
+const urlGET = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
+const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
 
 // variáveis globais
 let userName;                                        // nome usuário
 const link = document.querySelector("input");        // input
+const blusas = []                                    // blusas do servidor
+const idsAleatorios = [];                           // ids aleatorios e nao repetidos para o POST ao servidor
 
 // monitora teclado para atualizar layout do botao
 link.addEventListener(("keyup"), habilitaBotao);
 
 // funções
+
+
 function habilitaBotao() {
     const botao = document.querySelector("button");   // button
 
@@ -60,10 +66,54 @@ function efeitosMontarBlusa(elemento){
 
 function fazerLogin() {
     userName = prompt("Entre com o seu nome: ");
+
+    if (userName == "" || userName == undefined || userName == null) { // se o nome é iválido
+        alert("Digite um nome válido!"); // recarrega a página com msg de erro
+        window.location.reload();
+    }
+}
+
+function geraIdAleatorio(min, max) {
+    if (idsAleatorios.length < (max - min + 1)) // se há menos elementos no vetor que o inervalo válido para geração de ids
+    {
+        let num = Math.round(Math.random() * (max - min) + min);
+        while (idsAleatorios.includes(num)) { // gera id enquanto o id ainda nao tiver sido incluído na lista
+            num = Math.round(Math.random() * (max - min) + min);
+        }
+        idsAleatorios.push(num); // depois de garantido que o id não estava na lista, insere
+    
+        return num;
+    }
 }
 
 function montarBlusa() {
-    console.log('clicou')
+    const itensSelecionados = document.querySelectorAll(".selecionado");
+    const nomesItens = [];
+
+    itensSelecionados.forEach((s) => {
+        const divPai = s.parentNode;
+        const textoSpan = divPai.querySelector("span").innerHTML;
+        nomesItens.push(textoSpan);
+    });
+
+    const id = geraIdAleatorio(5800, 5900);
+    const camiseta = {"id": id, 
+                    "model": nomesItens[0], 
+                    "neck": nomesItens[1], 
+                    "material": nomesItens[2], 
+                    "owner": userName, 
+                    "image": link.value};
+
+    console.log(camiseta);
+    const promise = axios.post(urlPOST, camiseta);
+    promise.then((resposta) => {
+        console.log(camiseta);
+        alert(`Encomenda confirmada!\n*Uma ${nomesItens[0]} 
+            em ${nomesItens[2]} e do tipo ${nomesItens[1]}*`);
+    });
+    promise.catch((erro) => {
+        alert("Ops, não conseguimos processar sua encomenda");
+    });
 }
 
 fazerLogin();
