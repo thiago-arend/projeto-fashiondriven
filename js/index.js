@@ -1,22 +1,42 @@
 // configuração axios
 axios.defaults.headers.common['Authorization'] = 'jJo7ORw9ajCoGsHMsNZCQBo7';
 const urlGET = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
-const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
+const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirt";
 
 // variáveis globais
 let userName;                                        // nome usuário
 const link = document.querySelector("input");        // input
-const blusas = []                                    // blusas do servidor
-const idsAleatorios = [];                           // ids aleatorios e nao repetidos para o POST ao servidor
 let idIntervaloMontarBlusa;                         // id do set intervalal para montar as blusas
 
 // monitora teclado para atualizar layout do botao
 link.addEventListener(("keyup"), habilitaBotao);
 
 // funções
-// function listaBlusas() {
+function renderizaBlusas() {
+    // lista blusas
+    const promise = axios.get(urlGET);
 
-// }
+    promise.then((resposta) => {
+        const listaBlusas = resposta.data;
+
+        // renderiza
+        const ultimosPedidos = document.querySelector(".ultimos-pedidos");
+        ultimosPedidos.innerHTML = "";
+
+        console.log(listaBlusas)
+        listaBlusas.forEach((b) => {
+            console.log(b.author)
+            ultimosPedidos.innerHTML += `<div>
+                <img src="${b.image}" alt="">
+                <span><span>Criador: </span><span>${b.owner}</span></span>
+                </div>`;
+        });
+    });
+
+    promise.catch(() => {
+        alert("Ocorreu um erro ao buscar as blusas! Tente novamente");
+    });
+}
 
 function habilitaBotao() {
     const botao = document.querySelector("button");   // button
@@ -160,6 +180,8 @@ function renderizaErroPedido(mensagem) {
     setTimeout(() => {
         clearInterval(idIntervaloMontarBlusa);
         container.innerHTML = conteudoAntes;
+
+        renderizaBlusas();
     }, 10000);
 }
 
@@ -200,6 +222,8 @@ function renderizaSucessoPedido(urlImagem) {
         // remove o efeito de todos os itens marcados
         itensSelecionados.forEach((c) => c.classList.remove("selecionado"));
 
+        renderizaBlusas();
+
     }, 10000);
 }
 
@@ -235,5 +259,6 @@ function montarBlusa() {
     });
 }
 
+renderizaBlusas();
 fazerLogin();
 

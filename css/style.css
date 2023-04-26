@@ -109,6 +109,7 @@ body {
 .ultimos-pedidos {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .main .container .conteudo > div .circulo,
@@ -210,6 +211,7 @@ button {
 
 .container-ultimos-pedidos {
     background-color: #F2F2F2;
+    height: 660px;
     width: 1060px;
 }
 
@@ -255,6 +257,14 @@ button {
 
 .ultimos-pedidos {
     height: 342px;
+}
+
+.ultimos-pedidos div:nth-child(1), 
+.ultimos-pedidos div:nth-child(2), 
+.ultimos-pedidos div:nth-child(3),
+.ultimos-pedidos div:nth-child(4),
+.ultimos-pedidos div:nth-child(5) {
+    margin-bottom: 18px;
 }
 
 .ultimos-pedidos div {
