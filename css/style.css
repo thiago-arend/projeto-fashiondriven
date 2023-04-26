@@ -24,6 +24,7 @@ body {
     width: 248px;
     height: 39px;
     border-radius: 20px;
+    font-size: 18px;
 
     display: flex;
     justify-content: center;
@@ -36,7 +37,7 @@ body {
 
 .main {
     height: 785px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 
     display: flex;
 }
@@ -160,8 +161,16 @@ button {
     width: 1060px;
 }
 
+.container-ultimos-pedidos .menu {
+    padding-bottom: 24px;
+    width: 610px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
 .container-ultimos-pedidos p {
-    margin-bottom: 16px;
+    margin-bottom: 30px;
     font-size: 24px;
 }
 
@@ -171,6 +180,25 @@ button {
 
 .container-ultimos-pedidos span span:nth-child(1) {
     font-weight: bold;
+}
+
+.menu div {
+    background-color: #C4C4C4;
+    height: 36px;
+    width: fit-content;
+    padding: 0 12px;
+    color: #FCFCFC;
+    font-size: 20px;
+    border: 1px solid #C4C4C4;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+}
+
+.menu div:nth-child(1) {
+    background-color: #404EED;
+    border: 1px solid #404EED;
 }
 
 .ultimos-pedidos {
