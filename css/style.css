@@ -156,6 +156,59 @@ button {
     border: 1px solid #404EED;
 }
 
+.container-sucesso-pedido {
+    height: 580px;
+    width: 600px;
+    
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container-sucesso-pedido h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.container-sucesso-pedido img {
+    width: 436px;
+    height: 524px;
+    margin-bottom: 15px;
+}
+
+.container-sucesso-pedido span {
+    color: #404EED;
+    font-size: 20px;
+    text-align: center;
+    line-height: 23px;
+}
+
+.container-sucesso-pedido div {
+    width: 200px;
+}
+
+/* configurações container-sucesso-pedidos */
+.main .container .conteudo {
+    margin-top: 0;
+}
+
+.main .container .conteudo > div {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.main .container:nth-child(1) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.main .container .conteudo span {
+    text-shadow: none;
+}
+
+/* fim -- configurações container-sucesso-pedidos */
+
 .container-ultimos-pedidos {
     background-color: #F2F2F2;
     width: 1060px;
@@ -212,4 +265,9 @@ button {
     border-radius: 10px;
 
     justify-content: space-around;
+}
+
+.ultimos-pedidos div img {
+    width: 195px;
+    height: 193px;
 }

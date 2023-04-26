@@ -8,14 +8,15 @@ let userName;                                        // nome usuário
 const link = document.querySelector("input");        // input
 const blusas = []                                    // blusas do servidor
 const idsAleatorios = [];                           // ids aleatorios e nao repetidos para o POST ao servidor
+let idIntervaloMontarBlusa;                         // id do set intervalal para montar as blusas
 
 // monitora teclado para atualizar layout do botao
 link.addEventListener(("keyup"), habilitaBotao);
 
 // funções
-function listaBlusas() {
+// function listaBlusas() {
 
-}
+// }
 
 function habilitaBotao() {
     const botao = document.querySelector("button");   // button
@@ -87,11 +88,44 @@ function geraIdAleatorio(min, max) {
         }
         idsAleatorios.push(num); // depois de garantido que o id não estava na lista, insere
     
-        return num;
+        return num; // retorna id aleatorio
+    }
+}
+
+// tradução portugês/inglês dos nomes para manter consistente o servidor
+function traduzNome(nome) {
+    switch (nome.toLowerCase())
+    {
+        case "camiseta":
+            return "top-tank";
+            break;
+        case "manga longa":
+            return "long-sleeved";
+            break;
+        case "gola v":
+            return "v-neck"
+            break;
+        case "gola redonda":
+            return "round";
+            break;
+        case "gola polo":
+            return "polo";
+            break;
+        case "algodão":
+            return "cotton";
+            break;
+        case "seda":
+            return "silk";
+            break;
+        case "poliéster":
+            return "polyester";
+        default:
+            return "t-shirt";
     }
 }
 
 function montarBlusa() {
+    // dados para a requisição POST
     const itensSelecionados = document.querySelectorAll(".selecionado");
     const nomesItens = [];
 
@@ -109,14 +143,51 @@ function montarBlusa() {
                     "owner": userName, 
                     "image": link.value};
 
-    console.log(camiseta);
+    const nomesItensTraduzidos = nomesItens.map((n) => traduzNome(n));
+
+    const container = document.querySelector(".conteudo");
+    const conteudoAntes = container.innerHTML;
+    container.innerHTML = "";
+    let templateSucessoPedido = `
+    <div class="container-sucesso-pedido">
+        <h1>Pedido feito com sucesso!</h1>
+        <img src="./images/Blusa1.png" alt="">
+        <div><span>Voltando para a página principal em 10s</span></div>
+    </div>`;
+    container.innerHTML = templateSucessoPedido;
+
+    // atualiza timer 10 segundos
+    let i = 10;
+    let span = document.querySelector(".container-sucesso-pedido span");
+    idIntervaloMontarBlusa = setInterval(() => {
+        i--;
+        if (i !== 0) { // consicional apenas para não exibir o 0 ao final
+            span.innerHTML = `Voltando para a página principal em ${i}s`;
+        }
+        
+    }, 1000);
+
+    // agenda volta para a tela antiga
+    setTimeout(() => {
+        clearInterval(idIntervaloMontarBlusa);
+        container.innerHTML = conteudoAntes;
+
+        // limpa os campos
+        link.value = "";
+        // seleciona os itens marcados
+        const itensSelecionados = document.querySelectorAll(".selecionado");
+        // remove o efeito de todos os itens marcados
+        itensSelecionados.forEach((c) => c.classList.remove("selecionado"));
+
+    }, 10000);
+
+    // construção da requisição
     const promise = axios.post(urlPOST, camiseta);
     promise.then((resposta) => {
-        console.log(camiseta);
-        alert(`Encomenda confirmada!\n*Uma ${nomesItens[0]} 
-            em ${nomesItens[2]} e do tipo ${nomesItens[1]}*`);
+        console.log(resposta);
     });
     promise.catch((erro) => {
+        console.log(erro);
         alert("Ops, não conseguimos processar sua encomenda");
     });
 }
