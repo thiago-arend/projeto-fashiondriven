@@ -1,7 +1,7 @@
 // configuração axios
 axios.defaults.headers.common['Authorization'] = 'jJo7ORw9ajCoGsHMsNZCQBo7';
 const urlGET = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
-const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
+const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirt";
 
 // variáveis globais
 let userName;                                        // nome usuário
@@ -79,19 +79,6 @@ function fazerLogin() {
     document.querySelector(".header div > span span").innerHTML = userName;
 }
 
-function geraIdAleatorio(min, max) {
-    if (idsAleatorios.length < (max - min + 1)) // se há menos elementos no vetor que o inervalo válido para geração de ids
-    {
-        let num = Math.round(Math.random() * (max - min) + min);
-        while (idsAleatorios.includes(num)) { // gera id enquanto o id ainda nao tiver sido incluído na lista
-            num = Math.round(Math.random() * (max - min) + min);
-        }
-        idsAleatorios.push(num); // depois de garantido que o id não estava na lista, insere
-    
-        return num; // retorna id aleatorio
-    }
-}
-
 // tradução portugês/inglês dos nomes para manter consistente o servidor
 function traduzNome(nome) {
     switch (nome.toLowerCase())
@@ -100,7 +87,7 @@ function traduzNome(nome) {
             return "top-tank";
             break;
         case "manga longa":
-            return "long-sleeved";
+            return "long";
             break;
         case "gola v":
             return "v-neck"
@@ -124,41 +111,76 @@ function traduzNome(nome) {
     }
 }
 
-function montarBlusa() {
-    // dados para a requisição POST
-    const itensSelecionados = document.querySelectorAll(".selecionado");
-    const nomesItens = [];
+function removeEfeitosTextoGenerico(tipoMensagem) {
+    if (tipoMensagem === "sucesso")
+    {
+        const span = document.querySelector(".container-status-pedido span");
+        span.style.textShadow = "none";
+        const containerPedido = document.querySelector(".container-status-pedido");
+        containerPedido.style.marginTop = 65 + "px";
+    }
+    else if (tipoMensagem === "erro")
+    {
+        const spanErro1 = document.querySelector(".status-erro");
+        const spanErro2 = document.querySelector(".timer");
+        spanErro1.style.textShadow = "none";
+        spanErro2.style.textShadow = "none";
 
-    itensSelecionados.forEach((s) => {
-        const divPai = s.parentNode;
-        const textoSpan = divPai.querySelector("span").innerHTML;
-        nomesItens.push(textoSpan);
-    });
+        const containerPedidoErro = document.querySelector(".container-status-pedido-erro");
+        containerPedidoErro.style.marginTop = 65 + "px";
+    }
+}
 
-    const id = geraIdAleatorio(5800, 5900);
-    const camiseta = {"id": id, 
-                    "model": nomesItens[0], 
-                    "neck": nomesItens[1], 
-                    "material": nomesItens[2], 
-                    "owner": userName, 
-                    "image": link.value};
-
-    const nomesItensTraduzidos = nomesItens.map((n) => traduzNome(n));
-
+function renderizaErroPedido(status) {
     const container = document.querySelector(".conteudo");
     const conteudoAntes = container.innerHTML;
+    const conteudoInputAntes = link.value;
+    
     container.innerHTML = "";
-    let templateSucessoPedido = `
-    <div class="container-sucesso-pedido">
-        <h1>Pedido feito com sucesso!</h1>
-        <img src="./images/Blusa1.png" alt="">
-        <div><span>Voltando para a página principal em 10s</span></div>
+    let templateErroPedido = `
+    <div class="container-status-pedido-erro">
+        <h1>Algo deu errado!</h1>
+        <div><span class="status-erro">Um passarinho me contou que a imagem não é válida. Tente novamente!</span></div>
+        <div><img src="./images/Blusa-erro.png" alt=""></div>
+        <div><span class="timer">Voltando para a página principal em 10s</span></div>
     </div>`;
-    container.innerHTML = templateSucessoPedido;
+    container.innerHTML = templateErroPedido;
+    removeEfeitosTextoGenerico("erro");
 
     // atualiza timer 10 segundos
     let i = 10;
-    let span = document.querySelector(".container-sucesso-pedido span");
+    let span = document.querySelector(".timer");
+    idIntervaloMontarBlusa = setInterval(() => {
+        i--;
+        if (i !== 0) { // consicional apenas para não exibir o 0 ao final
+            span.innerHTML = `Voltando para a página principal em ${i}s`;
+        }
+    }, 1000);
+
+    // agenda volta para a tela antiga
+    setTimeout(() => {
+        clearInterval(idIntervaloMontarBlusa);
+        container.innerHTML = conteudoAntes;
+    }, 10000);
+}
+
+function renderizaSucessoPedido(urlImagem) {
+    const container = document.querySelector(".conteudo");
+    const conteudoAntes = container.innerHTML;
+
+    container.innerHTML = "";
+    let templateSucessoPedido = `
+    <div class="container-status-pedido">
+        <h1>Pedido feito com sucesso!</h1>
+        <img src="${urlImagem}" alt="">
+        <div><span class="timer">Voltando para a página principal em 10s</span></div>
+    </div>`;
+    container.innerHTML = templateSucessoPedido;
+    removeEfeitosTextoGenerico("sucesso");
+
+    // atualiza timer 10 segundos
+    let i = 10;
+    let span = document.querySelector(".timer");
     idIntervaloMontarBlusa = setInterval(() => {
         i--;
         if (i !== 0) { // consicional apenas para não exibir o 0 ao final
@@ -180,15 +202,35 @@ function montarBlusa() {
         itensSelecionados.forEach((c) => c.classList.remove("selecionado"));
 
     }, 10000);
+}
+
+function montarBlusa() {
+    // dados para a requisição POST
+    const itensSelecionados = document.querySelectorAll(".selecionado");
+    const nomesItens = [];
+    itensSelecionados.forEach((s) => {
+        const divPai = s.parentNode;
+        const textoSpan = divPai.querySelector("span").innerHTML;
+        nomesItens.push(textoSpan);
+    });
+    const nomesItensTraduzidos = nomesItens.map((n) => traduzNome(n));
+
+    const camiseta = { 
+                    "model": nomesItensTraduzidos[0], 
+                    "neck": nomesItensTraduzidos[1], 
+                    "material": nomesItensTraduzidos[2], 
+                    "image": link.value, 
+                    "owner": userName, 
+                    "author": userName};
 
     // construção da requisição
     const promise = axios.post(urlPOST, camiseta);
-    promise.then((resposta) => {
-        console.log(resposta);
+    promise.then((res) => {
+        renderizaSucessoPedido(res.data.image);
     });
     promise.catch((erro) => {
         console.log(erro);
-        alert("Ops, não conseguimos processar sua encomenda");
+        renderizaErroPedido(erro.response.status);
     });
 }
 
