@@ -12,9 +12,26 @@ body {
     background-color: #404EED;
     height: 89px;
     padding-left: 140px;
+    padding-right: 140px;
 
     display: flex;
+    justify-content: space-between;
     align-items: center;
+}
+
+.header div {
+    background-color: #D9D9D9;
+    width: 248px;
+    height: 39px;
+    border-radius: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header div > span span {
+    font-weight: bold;
 }
 
 .main {
@@ -164,7 +181,7 @@ button {
     width: 200px;
     height: 236px;
     background-color: #FFFFFF;
-    border-radius: 8px;
+    border-radius: 10px;
 
     justify-content: space-around;
 }

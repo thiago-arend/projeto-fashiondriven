@@ -13,7 +13,9 @@ const idsAleatorios = [];                           // ids aleatorios e nao repe
 link.addEventListener(("keyup"), habilitaBotao);
 
 // funções
+function listaBlusas() {
 
+}
 
 function habilitaBotao() {
     const botao = document.querySelector("button");   // button
@@ -71,6 +73,9 @@ function fazerLogin() {
         alert("Digite um nome válido!"); // recarrega a página com msg de erro
         window.location.reload();
     }
+
+    // userName válido; atualiza layout
+    document.querySelector(".header div > span span").innerHTML = userName;
 }
 
 function geraIdAleatorio(min, max) {
