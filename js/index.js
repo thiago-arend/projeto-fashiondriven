@@ -55,6 +55,8 @@ btnConfirm.addEventListener("click", confirmar);
 
 // ======== funções de negócio ==============
 function encomendar(objBlusa) {
+    const objTrad = traduzObjeto(objBlusa);
+
     // abre o fundo e o modal
     fundoModal.style.display = "block";
 
@@ -63,7 +65,7 @@ function encomendar(objBlusa) {
     modal.innerHTML = `<img src="${objBlusa.image}" alt="">
         <div>
         <div>
-        <h1>${objBlusa.model} com gola ${objBlusa.neck} de ${objBlusa.material}</h1>
+        <h1>${objTrad[0]} com ${objTrad[1]} de ${objTrad[2]}</h1>
         <span><span>Criador: </span>${objBlusa.owner}</span>
         </div>
         <div>
@@ -161,7 +163,7 @@ function efeitosFiltroPesquisa(elemento) {
         // adiciona o efeito apenas no desejado
         elemento.classList.toggle("opcao-selecionada");
         // guarda informação do selecionado
-        criterioFiltro = traduzNome(elemento.innerHTML);
+        criterioFiltro = traduzNomePortIng(elemento.innerHTML);
     }
 
     // renderiza
@@ -202,7 +204,7 @@ function fazerLogin() {
 }
 
 // tradução portugês/inglês dos nomes para manter consistente o servidor
-function traduzNome(nome) {
+function traduzNomePortIng(nome) {
     switch (nome.toLowerCase())
     {
         case "camiseta":
@@ -235,6 +237,48 @@ function traduzNome(nome) {
         default:
             return "t-shirt";
     }
+}
+
+// tradução inglês/português dos nomes para manter consistente o servidor
+function traduzNomeIngPort(nome) {
+    switch (nome.toLowerCase())
+    {
+        case "top-tank":
+            return "camiseta";
+            break;
+        case "long":
+            return "manga longa";
+            break;
+        case "v-neck":
+            return "gola v"
+            break;
+        case "round":
+            return "gola redonda";
+            break;
+        case "polo":
+            return "gola polo";
+            break;
+        case "cotton":
+            return "algodão";
+            break;
+        case "silk":
+            return "seda";
+            break;
+        case "polyester":
+            return "poliéster";
+            break;
+        default:
+            return "t-shirt";
+    }
+}
+
+function traduzObjeto(obj) {
+    const listaTrad = [];
+    listaTrad.push(traduzNomeIngPort(obj.model));
+    listaTrad.push(traduzNomeIngPort(obj.neck));
+    listaTrad.push(traduzNomeIngPort(obj.material));
+
+    return listaTrad;
 }
 
 function removeEfeitosTextoGenerico(tipoMensagem) {
@@ -342,7 +386,7 @@ function montarBlusa() {
         const textoSpan = divPai.querySelector("span").innerHTML;
         nomesItens.push(textoSpan);
     });
-    const nomesItensTraduzidos = nomesItens.map((n) => traduzNome(n));
+    const nomesItensTraduzidos = nomesItens.map((n) => traduzNomePortIng(n));
     const camiseta = {
                     "model": nomesItensTraduzidos[0], 
                     "neck": nomesItensTraduzidos[1], 
