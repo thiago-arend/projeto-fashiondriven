@@ -1,7 +1,7 @@
 // configuração axios
 axios.defaults.headers.common['Authorization'] = 'jJo7ORw9ajCoGsHMsNZCQBo7';
 const urlGET = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
-const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirt";
+const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
 
 
 
@@ -29,20 +29,46 @@ const btnCancel = document.querySelector(".cancela");
 link.addEventListener(("keyup"), habilitaBotao);
 
 const cancelar = function() {
+    localStorage.clear();
     fundoModal.style.display = "none";
 }
-const confirmar = function(img) {
-    // limpa conteudo do modal e atualiza
-    modal.innerHTML = "";
-    modal.innerHTML = `<img src="${img}" alt="">
-        <div>
-        <div>
-        <h1>Pedido feito com sucesso!</h1>
-        </div>
-        <div>
-        <button onclick="cancelar()" class="cancela">Fechar</button>
-        </div>
-        </div> `;
+const confirmar = function() {
+    // busca o objeto da local storage
+    const objBlusa = JSON.parse(localStorage.getItem("pedido"));
+    localStorage.clear();
+
+    // refina o objeto para o post
+    const obj = {model: objBlusa.model, neck: objBlusa.neck, material: objBlusa.material, 
+        image: objBlusa.image, owner: userName, author: objBlusa.owner};
+
+    // monta uma requisição post para envia a encomenda
+    const promise = axios.post(urlPOST, obj);
+    promise.then((res) => { // em caso de sucesso
+        // limpa conteudo do modal e atualiza
+        modal.innerHTML = "";
+        modal.innerHTML = `<img src="${obj.image}" alt="">
+            <div>
+            <div>
+            <h1>Pedido feito com sucesso!</h1>
+            </div>
+            <div>
+            <button onclick="cancelar()" class="cancela">Fechar</button>
+            </div>
+            </div> `;
+    });
+    promise.catch((err) => { // em caso de erro
+        // limpa conteudo do modal e atualiza
+        modal.innerHTML = "";
+        modal.innerHTML = `<img src="./images/Blusa-erro.png" alt="">
+            <div>
+            <div>
+            <h1>Estamos com problemas para processar o seu pedido.</h1>
+            </div>
+            <div>
+            <button onclick="cancelar()" class="cancela">Fechar</button>
+            </div>
+            </div> `;       
+    });
 }
 
 // adiciona função de confirmar e cancelar encomenda
@@ -53,6 +79,9 @@ btnConfirm.addEventListener("click", confirmar);
 
 // ======== funções de negócio ==============
 function encomendar(objBlusa) {
+    // salva o objeto blusa em um local storage
+    localStorage.setItem("pedido", JSON.stringify(objBlusa));
+
     const objTrad = traduzObjeto(objBlusa);
 
     // abre o fundo e o modal
@@ -67,7 +96,7 @@ function encomendar(objBlusa) {
         <span><span>Criador: </span>${objBlusa.owner}</span>
         </div>
         <div>
-        <button onclick="confirmar('${objBlusa.image}')" class="confirma">Confirmar <br>pedido</button>
+        <button onclick="confirmar()" class="confirma">Confirmar <br>pedido</button>
         <button onclick="cancelar()" class="cancela">Cancelar</button>
         </div>
         </div>`;
