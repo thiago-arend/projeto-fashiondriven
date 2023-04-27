@@ -6,12 +6,22 @@ const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirt";
 // variáveis globais
 let userName;                                        // nome usuário
 const link = document.querySelector("input");        // input
+let criterioFiltro = "all";                       // criterio do filtro começa setado em todos
 let idIntervaloMontarBlusa;                         // id do set intervalal para montar as blusas
 
 // monitora teclado para atualizar layout do botao
 link.addEventListener(("keyup"), habilitaBotao);
 
 // funções
+function encomendar(objBlusa) {
+    const encomendou = confirm("Deseja realmente encomendar essa peça?");
+    if (encomendou)
+        alert(`=> CONFIRMAÇÃO DE ENCOMENDA <=\n
+                * Modelo: ${objBlusa.model} *\n
+                * Gola: ${objBlusa.neck} *\n
+                * Material: ${objBlusa.material} *`);
+}
+
 function renderizaBlusas() {
     // lista blusas
     const promise = axios.get(urlGET);
@@ -22,15 +32,34 @@ function renderizaBlusas() {
         // renderiza
         const ultimosPedidos = document.querySelector(".ultimos-pedidos");
         ultimosPedidos.innerHTML = "";
+        let blusasFiltradas;
 
-        console.log(listaBlusas)
-        listaBlusas.forEach((b) => {
-            console.log(b.author)
-            ultimosPedidos.innerHTML += `<div>
-                <img src="${b.image}" alt="">
-                <span><span>Criador: </span><span>${b.owner}</span></span>
-                </div>`;
-        });
+        if (criterioFiltro !== "all") {
+            blusasFiltradas = listaBlusas.filter((b) => b.model === criterioFiltro);
+        }
+        else {
+            blusasFiltradas = listaBlusas;
+        }
+
+        if (blusasFiltradas.length !== 0) {
+            blusasFiltradas.forEach((b) => {
+                ultimosPedidos.innerHTML += `<div>
+                    <img src="${b.image}" alt="">
+                    <span><span>Criador: </span><span>${b.owner}</span></span>
+                    </div>`;
+            });
+
+            // usamos o indice do vetor nodeList e os dados do vetor de objetos lado a lado
+            const listaEncomendas = document.querySelectorAll(".ultimos-pedidos div");
+            for (let i = 0; i < listaEncomendas.length; i++){
+                listaEncomendas[i].addEventListener("click", () => encomendar(blusasFiltradas[i]));
+                //console.log(i + ", " + blusasFiltradas[i].image);
+            }
+        }
+        else {
+            ultimosPedidos.innerHTML = `<span class="erro-filtro-blusas">Sua busca não obteve resultados...</span>`;
+        }
+
     });
 
     promise.catch(() => {
@@ -64,6 +93,28 @@ function habilitaBotao() {
         botao.classList.remove("validado");     // altera layout do botao e desabilita
         botao.disabled = true;
     }
+}
+
+function efeitosFiltroPesquisa(elemento) {
+
+    const selecionado = elemento.classList.contains("opcao-selecionada");
+
+    if (!selecionado) { // se clicou em um item não selecionado
+        // seleciona menu
+        const menu = elemento.parentNode;
+
+        // seleciona as divs do menu
+        const listaOpcoes = menu.querySelectorAll(".menu-op");
+        // remove o efeito de todos os itens
+        listaOpcoes.forEach((o) => o.classList.remove("opcao-selecionada"));
+        // adiciona o efeito apenas no desejado
+        elemento.classList.toggle("opcao-selecionada");
+        // guarda informação do selecionado
+        criterioFiltro = traduzNome(elemento.innerHTML);
+    }
+
+    // renderiza
+    renderizaBlusas();
 }
 
 function efeitosMontarBlusa(elemento){
@@ -126,6 +177,10 @@ function traduzNome(nome) {
             break;
         case "poliéster":
             return "polyester";
+            break;
+        case "todos os modelos":
+            return "all";
+            break;
         default:
             return "t-shirt";
     }
@@ -259,6 +314,5 @@ function montarBlusa() {
     });
 }
 
-renderizaBlusas();
 fazerLogin();
-
+renderizaBlusas();

@@ -236,7 +236,7 @@ button {
     font-weight: bold;
 }
 
-.menu div {
+.menu-op {
     background-color: #C4C4C4;
     height: 36px;
     width: fit-content;
@@ -250,7 +250,7 @@ button {
     align-items: center;
 }
 
-.menu div:nth-child(1) {
+.opcao-selecionada {
     background-color: #404EED;
     border: 1px solid #404EED;
 }
@@ -279,4 +279,23 @@ button {
 .ultimos-pedidos div img {
     width: 195px;
     height: 193px;
+}
+
+.erro-filtro-blusas {
+    font-size: 24px;
+    color: #404EED;
+}
+
+
+/* configurações do MODAL */
+.modal-fundo {
+    display: none; /* escondido no inicio */
+    position: fixed; /* fixo na tela enquanto movimenta, para cobrir todo o conteudo */
+    z-index: 1; /* na frente de tudo */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* possibilita rolagem se necessário */
+    background-color: rgba(217, 217, 217, 0.62); /* fundo com opacidade 62% */
 }
