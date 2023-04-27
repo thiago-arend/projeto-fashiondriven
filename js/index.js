@@ -1,4 +1,4 @@
-// configuração axios
+// ============= configuração axios ==============
 axios.defaults.headers.common['Authorization'] = 'jJo7ORw9ajCoGsHMsNZCQBo7';
 const urlGET = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
 const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
@@ -6,33 +6,37 @@ const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
 
 
 // ======== variáveis globais gerais ===========
-let userName;                                        // nome usuário
-const link = document.querySelector("input");        // input
+let userName;                                     // nome usuário
 let criterioFiltro = "all";                       // criterio do filtro começa setado em todos
-let idIntervaloMontarBlusa;                         // id do set intervalal para montar as blusas
+let idIntervaloMontarBlusa;                       // id do set intervalal para montar as blusas
 
 
 
 // ====== variaveis para listeners globais ==========
+const link = document.querySelector("input");        // input
+
 // pega o fundo e o modal
 const fundoModal = document.querySelector(".modal-fundo");
 const modal = document.querySelector(".modal-conteudo");
 
-// pega o botao confirmacao
+// pega o botao confirmacao de encomenda
 const btnConfirm = document.querySelector(".confirma");
 
-// pega o botao cancela
+// pega o botao de cancelar encomenda
 const btnCancel = document.querySelector(".cancela");
+
 
 
 // ========= listeners e funções anonimas globais =================
 // monitora teclado para atualizar layout do botao
 link.addEventListener(("keyup"), habilitaBotao);
 
+// cancelar e confirmar encomenda de outra pessoa
 const cancelar = function() {
     localStorage.clear();
     fundoModal.style.display = "none";
 }
+
 const confirmar = function() {
     // busca o objeto da local storage
     const objBlusa = JSON.parse(localStorage.getItem("pedido"));
@@ -79,10 +83,12 @@ btnConfirm.addEventListener("click", confirmar);
 
 
 // ======== funções de negócio ==============
+// encomenda de blusa de outra pessoa
 function encomendar(objBlusa) {
-    // salva o objeto blusa em um local storage
+    // salva o objeto blusa em local storage
     localStorage.setItem("pedido", JSON.stringify(objBlusa));
 
+    // traduz o objeto
     const objTrad = traduzObjeto(objBlusa);
 
     // abre o fundo e o modal
@@ -103,11 +109,12 @@ function encomendar(objBlusa) {
         </div>`;
 }
 
+// carrega as blusas criadas na tela
 function renderizaBlusas() {
-    // lista blusas
+    // prepara a requisição get
     const promise = axios.get(urlGET);
 
-    promise.then((resposta) => {
+    promise.then((resposta) => { // caso ok
         const listaBlusas = resposta.data;
 
         // renderiza
@@ -115,6 +122,7 @@ function renderizaBlusas() {
         ultimosPedidos.innerHTML = "";
         let blusasFiltradas;
 
+        // aplica o filtro
         if (criterioFiltro !== "all") {
             blusasFiltradas = listaBlusas.filter((b) => b.model === criterioFiltro);
         }
@@ -122,6 +130,7 @@ function renderizaBlusas() {
             blusasFiltradas = listaBlusas;
         }
 
+        // mostra na tela se houver blusas
         if (blusasFiltradas.length !== 0) {
             blusasFiltradas.forEach((b) => {
                 ultimosPedidos.innerHTML += `<div>
@@ -136,18 +145,19 @@ function renderizaBlusas() {
                 listaEncomendas[i].addEventListener("click", () => encomendar(blusasFiltradas[i]));
                 //console.log(i + ", " + blusasFiltradas[i].image);
             }
-        }
+        } // senão mostra mensagem
         else {
             ultimosPedidos.innerHTML = `<span class="erro-filtro-blusas">Sua busca não obteve resultados...</span>`;
         }
 
     });
 
-    promise.catch(() => {
+    promise.catch(() => { // caso erro
         alert("Ocorreu um erro ao buscar as blusas! Tente novamente");
     });
 }
 
+// função que monitora o status do botao de encomenda (se está liberado ou nao)
 function habilitaBotao() {
     const botao = document.querySelector("button");   // button
 
@@ -180,6 +190,7 @@ function habilitaBotao() {
     console.log("passouRegex ========= "+passouRegex)
 }
 
+// renderiza os efeitos do menu de filtros de pesquisa
 function efeitosFiltroPesquisa(elemento) {
 
     const selecionado = elemento.classList.contains("opcao-selecionada");
@@ -202,6 +213,7 @@ function efeitosFiltroPesquisa(elemento) {
     renderizaBlusas();
 }
 
+// renderiza os efeitos das opções de montagem de blusas
 function efeitosMontarBlusa(elemento){
     // querySelector devolve null caso nao exista o nodo procurado (null é avaliado como false)
     const selecionado = elemento.querySelector(".selecionado");
@@ -223,6 +235,7 @@ function efeitosMontarBlusa(elemento){
     habilitaBotao();
 }
 
+// login do usuário
 function fazerLogin() {
     userName = prompt("Entre com o seu nome: ");
 
@@ -304,6 +317,7 @@ function traduzNomeIngPort(nome) {
     }
 }
 
+// tradução dos dados de um objeto
 function traduzObjeto(obj) {
     const listaTrad = [];
     listaTrad.push(traduzNomeIngPort(obj.model));
@@ -313,6 +327,7 @@ function traduzObjeto(obj) {
     return listaTrad;
 }
 
+// remoção via dom de alguns efeitos de tela
 function removeEfeitosTextoGenerico(tipoMensagem) {
     if (tipoMensagem === "sucesso")
     {
@@ -333,12 +348,10 @@ function removeEfeitosTextoGenerico(tipoMensagem) {
     }
 }
 
+// renderização do layout gerado ao receber erro de encomenda
 function renderizaErroPedido(mensagem) {
     const container = document.querySelector(".conteudo");
-    const conteudoAntes = container.innerHTML;
-
-    // esconde o conteudo
-    // container.display = "none"
+    const conteudoAntes = container.innerHTML; // salva o conteudo anterior do container
 
     container.innerHTML = "";
     let templateErroPedido = `
@@ -348,9 +361,10 @@ function renderizaErroPedido(mensagem) {
         <div><img src="./images/Blusa-erro.png" alt=""></div>
         <div><span class="timer">Voltando para a página principal em 10s</span></div>
     </div>`;
-    container.innerHTML = templateErroPedido;
-    removeEfeitosTextoGenerico("erro");
+    container.innerHTML = templateErroPedido; // faz a troca do layout
+    removeEfeitosTextoGenerico("erro"); // remove os efeitos para o acaso de erro
 
+    // configuração do timer
     // atualiza timer 10 segundos
     let i = 10;
     let span = document.querySelector(".timer");
@@ -364,7 +378,7 @@ function renderizaErroPedido(mensagem) {
     // agenda volta para a tela antiga
     setTimeout(() => {
         clearInterval(idIntervaloMontarBlusa);
-        container.innerHTML = conteudoAntes;
+        container.innerHTML = conteudoAntes; // carrega novamente os dados antigos da página
 
         // atualiza o layout do botao
         habilitaBotao();
@@ -372,9 +386,10 @@ function renderizaErroPedido(mensagem) {
     }, 10000);
 }
 
+// renderização do layout gerado ao receber sucesso de encomenda
 function renderizaSucessoPedido(urlImagem) {
     const container = document.querySelector(".conteudo");
-    const conteudoAntes = container.innerHTML;
+    const conteudoAntes = container.innerHTML; // salva o conteudo anterior do container
 
     container.innerHTML = "";
     let templateSucessoPedido = `
@@ -384,8 +399,9 @@ function renderizaSucessoPedido(urlImagem) {
         <div><span class="timer">Voltando para a página principal em 10s</span></div>
     </div>`;
     container.innerHTML = templateSucessoPedido;
-    removeEfeitosTextoGenerico("sucesso");
+    removeEfeitosTextoGenerico("sucesso"); // remove efeitos em caso de sucesso
 
+    // configuração do timer
     // atualiza timer 10 segundos
     let i = 10;
     let span = document.querySelector(".timer");
@@ -416,6 +432,7 @@ function renderizaSucessoPedido(urlImagem) {
     }, 10000);
 }
 
+// montar blusa ao clicar no botao de criação de encomenda
 function montarBlusa() {
     // dados para a requisição POST
     const itensSelecionados = document.querySelectorAll(".selecionado");
