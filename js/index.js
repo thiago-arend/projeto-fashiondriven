@@ -24,8 +24,6 @@ const btnConfirm = document.querySelector(".confirma");
 // pega o botao cancela
 const btnCancel = document.querySelector(".cancela");
 
-
-
 // ========= listeners e funções anonimas globais =================
 // monitora teclado para atualizar layout do botao
 link.addEventListener(("keyup"), habilitaBotao);
@@ -304,7 +302,7 @@ function removeEfeitosTextoGenerico(tipoMensagem) {
 function renderizaErroPedido(mensagem) {
     const container = document.querySelector(".conteudo");
     const conteudoAntes = container.innerHTML;
-    
+
     container.innerHTML = "";
     let templateErroPedido = `
     <div class="container-status-pedido-erro">
@@ -331,6 +329,8 @@ function renderizaErroPedido(mensagem) {
         clearInterval(idIntervaloMontarBlusa);
         container.innerHTML = conteudoAntes;
 
+        // atualiza o layout do botao
+        habilitaBotao();
         renderizaBlusas();
     }, 10000);
 }
@@ -372,6 +372,8 @@ function renderizaSucessoPedido(urlImagem) {
         // remove o efeito de todos os itens marcados
         itensSelecionados.forEach((c) => c.classList.remove("selecionado"));
 
+        // atualiza o layout do botao
+        habilitaBotao();
         renderizaBlusas();
 
     }, 10000);
