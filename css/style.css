@@ -289,14 +289,13 @@ button {
 
 /* configurações do MODAL */
 .modal-fundo {
-    /*display: none;  escondido no inicio */
+    display: none;
     position: fixed; /* fixo na tela enquanto movimenta, para cobrir todo o conteudo */
     z-index: 1; /* na frente de tudo */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* possibilita rolagem se necessário */
     background-color: rgba(217, 217, 217, 0.62); /* fundo com opacidade 62% */
 }
 
@@ -306,6 +305,7 @@ button {
     border: 1px solid #FFFFFF;
     background-color: #FFFFFF;
     border-radius: 24px;
+    margin: 8% auto; /* 8% do topo e centralizado */
 
     display: flex;
     justify-content: space-between;
@@ -319,6 +319,7 @@ button {
 
 .modal-conteudo > div {
     height: 100%;
+    width: 40%;
 
     display: flex;
     flex-direction: column;

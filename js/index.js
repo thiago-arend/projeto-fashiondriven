@@ -3,23 +3,74 @@ axios.defaults.headers.common['Authorization'] = 'jJo7ORw9ajCoGsHMsNZCQBo7';
 const urlGET = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
 const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirt";
 
-// variáveis globais
+
+
+// ======== variáveis globais gerais ===========
 let userName;                                        // nome usuário
 const link = document.querySelector("input");        // input
 let criterioFiltro = "all";                       // criterio do filtro começa setado em todos
 let idIntervaloMontarBlusa;                         // id do set intervalal para montar as blusas
 
+
+
+// ====== variaveis para listeners globais ==========
+// pega o fundo e o modal
+const fundoModal = document.querySelector(".modal-fundo");
+const modal = document.querySelector(".modal-conteudo");
+
+// pega o botao confirmacao
+const btnConfirm = document.querySelector(".confirma");
+
+// pega o botao cancela
+const btnCancel = document.querySelector(".cancela");
+
+
+
+// ========= listeners e funções anonimas globais =================
 // monitora teclado para atualizar layout do botao
 link.addEventListener(("keyup"), habilitaBotao);
 
-// funções
+const cancelar = function() {
+    fundoModal.style.display = "none";
+}
+const confirmar = function(img) {
+    // limpa conteudo do modal e atualiza
+    modal.innerHTML = "";
+    modal.innerHTML = `<img src="${img}" alt="">
+        <div>
+        <div>
+        <h1>Pedido feito com sucesso!</h1>
+        </div>
+        <div>
+        <button onclick="cancelar()" class="cancela">Fechar</button>
+        </div>
+        </div> `;
+}
+
+// adiciona função de confirmar e cancelar encomenda
+btnCancel.addEventListener("click", cancelar);
+btnConfirm.addEventListener("click", confirmar);
+
+
+
+// ======== funções de negócio ==============
 function encomendar(objBlusa) {
-    const encomendou = confirm("Deseja realmente encomendar essa peça?");
-    if (encomendou)
-        alert(`=> CONFIRMAÇÃO DE ENCOMENDA <=\n
-                * Modelo: ${objBlusa.model} *\n
-                * Gola: ${objBlusa.neck} *\n
-                * Material: ${objBlusa.material} *`);
+    // abre o fundo e o modal
+    fundoModal.style.display = "block";
+
+    // atualiza o modal com os dados do encomenda
+    modal.innerHTML = "";
+    modal.innerHTML = `<img src="${objBlusa.image}" alt="">
+        <div>
+        <div>
+        <h1>${objBlusa.model} com gola ${objBlusa.neck} de ${objBlusa.material}</h1>
+        <span><span>Criador: </span>${objBlusa.owner}</span>
+        </div>
+        <div>
+        <button onclick="confirmar('${objBlusa.image}')" class="confirma">Confirmar <br>pedido</button>
+        <button onclick="cancelar()" class="cancela">Cancelar</button>
+        </div>
+        </div>`;
 }
 
 function renderizaBlusas() {
