@@ -24,6 +24,7 @@ const btnConfirm = document.querySelector(".confirma");
 // pega o botao cancela
 const btnCancel = document.querySelector(".cancela");
 
+
 // ========= listeners e funções anonimas globais =================
 // monitora teclado para atualizar layout do botao
 link.addEventListener(("keyup"), habilitaBotao);
@@ -173,6 +174,10 @@ function habilitaBotao() {
         botao.classList.remove("validado");     // altera layout do botao e desabilita
         botao.disabled = true;
     }
+
+    console.log(botao)
+    console.log(botao.disabled)
+    console.log("passouRegex ========= "+passouRegex)
 }
 
 function efeitosFiltroPesquisa(elemento) {
@@ -331,6 +336,9 @@ function removeEfeitosTextoGenerico(tipoMensagem) {
 function renderizaErroPedido(mensagem) {
     const container = document.querySelector(".conteudo");
     const conteudoAntes = container.innerHTML;
+
+    // esconde o conteudo
+    // container.display = "none"
 
     container.innerHTML = "";
     let templateErroPedido = `
