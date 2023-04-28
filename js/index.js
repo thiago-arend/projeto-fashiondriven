@@ -1,7 +1,7 @@
 // ============= configuração axios ==============
 axios.defaults.headers.common['Authorization'] = 'jJo7ORw9ajCoGsHMsNZCQBo7';
 const urlGET = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
-const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
+const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirt";
 
 
 
@@ -45,6 +45,12 @@ const confirmar = function() {
     // refina o objeto para o post
     const obj = {model: objBlusa.model, neck: objBlusa.neck, material: objBlusa.material, 
         image: objBlusa.image, owner: userName, author: objBlusa.owner};
+
+// ************************************************************************************************************************** //
+// deveria ser
+// const obj = {model: objBlusa.model, neck: objBlusa.neck, material: objBlusa.material, 
+//     image: objBlusa.image, owner: userName, author: objBlusa.author};
+// mas o servidor nao tem a propriedade author
 
     // monta uma requisição post para envia a encomenda
     const promise = axios.post(urlPOST, obj);
@@ -130,6 +136,9 @@ function renderizaBlusas() {
             blusasFiltradas = listaBlusas;
         }
 
+        // ************************************************************************************************************************** //
+        // aqui tbm deveria ser b.author, mas não há tal propriedade
+
         // mostra na tela se houver blusas
         if (blusasFiltradas.length !== 0) {
             blusasFiltradas.forEach((b) => {
@@ -145,6 +154,7 @@ function renderizaBlusas() {
                 listaEncomendas[i].addEventListener("click", () => encomendar(blusasFiltradas[i]));
                 //console.log(i + ", " + blusasFiltradas[i].image);
             }
+            
         } // senão mostra mensagem
         else {
             ultimosPedidos.innerHTML = `<span class="erro-filtro-blusas">Sua busca não obteve resultados...</span>`;
@@ -167,7 +177,7 @@ function habilitaBotao() {
     const tecido = document.querySelector(".tecido"); // div tecido
 
     // validação input
-    const regexValidaInput = /^(?:https?:\/\/)?(w{3}\.)?[\w_-]+((\.\w{2,}){1,2})(\/([\w\._-]+\/?)*(\?[\w_-]+=[^\?\/&]*(\&[\w_-]+=[^\?\/&]*)*)?)?$/gm; // regex para validação da url do input
+    const regexValidaInput = /^(http|https):\/\//g; // regex para validação da url do input
     const passouRegex = link.value.match(regexValidaInput) !== null; // flag guarda true se regex encontrou pelo menos um match
 
     // querySelector devolve null caso nao exista o nodo procurado (null é avaliado como false)
@@ -184,10 +194,6 @@ function habilitaBotao() {
         botao.classList.remove("validado");     // altera layout do botao e desabilita
         botao.disabled = true;
     }
-
-    console.log(botao)
-    console.log(botao.disabled)
-    console.log("passouRegex ========= "+passouRegex)
 }
 
 // renderiza os efeitos do menu de filtros de pesquisa
@@ -364,6 +370,8 @@ function renderizaErroPedido(mensagem) {
     container.innerHTML = templateErroPedido; // faz a troca do layout
     removeEfeitosTextoGenerico("erro"); // remove os efeitos para o acaso de erro
 
+    console.log(document.getElementsByClassName("container-status-pedido-erro"))
+
     // configuração do timer
     // atualiza timer 10 segundos
     let i = 10;
@@ -379,6 +387,8 @@ function renderizaErroPedido(mensagem) {
     setTimeout(() => {
         clearInterval(idIntervaloMontarBlusa);
         container.innerHTML = conteudoAntes; // carrega novamente os dados antigos da página
+
+        container
 
         // atualiza o layout do botao
         habilitaBotao();
