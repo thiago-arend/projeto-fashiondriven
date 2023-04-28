@@ -152,7 +152,6 @@ function renderizaBlusas() {
             const listaEncomendas = document.querySelectorAll(".ultimos-pedidos div");
             for (let i = 0; i < listaEncomendas.length; i++){
                 listaEncomendas[i].addEventListener("click", () => encomendar(blusasFiltradas[i]));
-                //console.log(i + ", " + blusasFiltradas[i].image);
             }
             
         } // senão mostra mensagem
