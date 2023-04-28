@@ -192,7 +192,7 @@ function habilitaBotao() {
     if (modelo.querySelector(".selecionado")    // se foi selecionado item em modelo && 
         && gola.querySelector(".selecionado")   // em gola && 
         && tecido.querySelector(".selecionado") // em tecido &&
-        && link.value.length > 0)                         // a flag de validação do input for verdadeira
+        && passouRegex)                         // a flag de validação do input for verdadeira
     {
         console.log("entrou")
         botao.classList.add("validado");        // altera layout do botao e habilita
