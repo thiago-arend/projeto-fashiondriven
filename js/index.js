@@ -1,7 +1,7 @@
 // ============= configuração axios ==============
 axios.defaults.headers.common['Authorization'] = 'jJo7ORw9ajCoGsHMsNZCQBo7';
 const urlGET = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
-const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirt";
+const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
 
 
 
@@ -29,7 +29,7 @@ const btnCancel = document.querySelector(".cancela");
 
 // ========= listeners e funções anonimas globais =================
 // monitora teclado para atualizar layout do botao
-link.addEventListener(("keyup"), habilitaBotao);
+//link.addEventListener(("keyup"), habilitaBotao);
 
 // cancelar e confirmar encomenda de outra pessoa
 const cancelar = function() {
@@ -169,28 +169,38 @@ function renderizaBlusas() {
 
 // função que monitora o status do botao de encomenda (se está liberado ou nao)
 function habilitaBotao() {
+    console.log("chamou")
     const botao = document.querySelector("button");   // button
 
     // validação da montagem da roupa
     const modelo = document.querySelector(".modelo"); // div modelo
     const gola = document.querySelector(".gola");     // div gola
     const tecido = document.querySelector(".tecido"); // div tecido
-
+    console.log(link.value.length)
+    
     // validação input
     const regexValidaInput = /^(http|https):\/\//g; // regex para validação da url do input
     const passouRegex = link.value.match(regexValidaInput) !== null; // flag guarda true se regex encontrou pelo menos um match
+
+    console.log(modelo.querySelector(".selecionado"))
+    console.log(gola.querySelector(".selecionado"))
+    console.log(tecido.querySelector(".selecionado"))
+    console.log(passouRegex)
+    console.log(link.value.length)
 
     // querySelector devolve null caso nao exista o nodo procurado (null é avaliado como false)
     if (modelo.querySelector(".selecionado")    // se foi selecionado item em modelo && 
         && gola.querySelector(".selecionado")   // em gola && 
         && tecido.querySelector(".selecionado") // em tecido &&
-        && passouRegex)                         // a flag de validação do input for verdadeira
+        && link.value.length > 0)                         // a flag de validação do input for verdadeira
     {
+        console.log("entrou")
         botao.classList.add("validado");        // altera layout do botao e habilita
         botao.disabled = false;
     }
     else                                        // senão
     {
+        console.log("nao entrou")
         botao.classList.remove("validado");     // altera layout do botao e desabilita
         botao.disabled = true;
     }
@@ -358,6 +368,7 @@ function removeEfeitosTextoGenerico(tipoMensagem) {
 function renderizaErroPedido(mensagem) {
     const container = document.querySelector(".conteudo");
     const conteudoAntes = container.innerHTML; // salva o conteudo anterior do container
+    const conteudoLink = document.querySelector(".campo-link").value;
 
     container.innerHTML = "";
     let templateErroPedido = `
@@ -369,8 +380,6 @@ function renderizaErroPedido(mensagem) {
     </div>`;
     container.innerHTML = templateErroPedido; // faz a troca do layout
     removeEfeitosTextoGenerico("erro"); // remove os efeitos para o acaso de erro
-
-    console.log(document.getElementsByClassName("container-status-pedido-erro"))
 
     // configuração do timer
     // atualiza timer 10 segundos
@@ -387,8 +396,7 @@ function renderizaErroPedido(mensagem) {
     setTimeout(() => {
         clearInterval(idIntervaloMontarBlusa);
         container.innerHTML = conteudoAntes; // carrega novamente os dados antigos da página
-
-        container
+        document.querySelector(".campo-link").value = conteudoLink; // mantem o link preenchido
 
         // atualiza o layout do botao
         habilitaBotao();
@@ -434,6 +442,9 @@ function renderizaSucessoPedido(urlImagem) {
         const itensSelecionados = document.querySelectorAll(".selecionado");
         // remove o efeito de todos os itens marcados
         itensSelecionados.forEach((c) => c.classList.remove("selecionado"));
+
+        console.log(link);
+        console.log(document.querySelector("button"))
 
         // atualiza o layout do botao
         habilitaBotao();
