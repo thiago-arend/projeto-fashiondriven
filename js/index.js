@@ -178,7 +178,7 @@ function habilitaBotao() {
     console.log(link.value.length)
     
     // validação input
-    const regexValidaInput = /^(http|https):\/\//g; // regex para validação da url do input
+    const regexValidaInput = /^(http|https):\/\/\w+/g; // regex para validação da url do input
     const passouRegex = link.value.match(regexValidaInput) !== null; // flag guarda true se regex encontrou pelo menos um match
 
     console.log(modelo.querySelector(".selecionado"))
@@ -478,7 +478,7 @@ function montarBlusa() {
         const codigo = erro.response.status;
         let mensagem = "";
         if (codigo === 422)
-            mensagem = "Parece que algum campo não foi preenchido da maneira correta. Tente novamente!";
+            mensagem = "Parece que você está tentando enviar uma mensagem inválida. Tente novamente!";
         else
             mensagem = "Estamos enfrentando alguns problemas internos. Tente novamente mais tarde!"
         renderizaErroPedido(mensagem);
