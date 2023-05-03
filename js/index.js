@@ -221,7 +221,7 @@ function efeitosFiltroPesquisa(elemento) {
         // adiciona o efeito apenas no desejado
         elemento.classList.toggle("opcao-selecionada");
         // guarda informação do selecionado
-        criterioFiltro = traduzNomePortIng(elemento.innerHTML);
+        criterioFiltro = traduz(elemento.innerHTML, "ingles");
     }
 
     // renderiza
@@ -264,80 +264,27 @@ function fazerLogin() {
 }
 
 // tradução portugês/inglês dos nomes para manter consistente o servidor
-function traduzNomePortIng(nome) {
-    switch (nome.toLowerCase())
-    {
-        case "camiseta":
-            return "top-tank";
-            break;
-        case "manga longa":
-            return "long";
-            break;
-        case "gola v":
-            return "v-neck"
-            break;
-        case "gola redonda":
-            return "round";
-            break;
-        case "gola polo":
-            return "polo";
-            break;
-        case "algodão":
-            return "cotton";
-            break;
-        case "seda":
-            return "silk";
-            break;
-        case "poliéster":
-            return "polyester";
-            break;
-        case "todos os modelos":
-            return "all";
-            break;
-        default:
-            return "t-shirt";
-    }
-}
+function traduz(nome, linguaDestino) {
+    const dict = {"camiseta": "top-tank", "manga longa": "long", 
+    "gola v": "v-neck", "gola redonda": "round", "gola polo": "polo",
+        "algodão": "cotton", "seda": "silk", "poliéster": "polyester",
+        "todos os modelos": "all", "t-shirt": "t-shirt"};
 
-// tradução inglês/português dos nomes para manter consistente o servidor
-function traduzNomeIngPort(nome) {
-    switch (nome.toLowerCase())
-    {
-        case "top-tank":
-            return "camiseta";
-            break;
-        case "long":
-            return "manga longa";
-            break;
-        case "v-neck":
-            return "gola v"
-            break;
-        case "round":
-            return "gola redonda";
-            break;
-        case "polo":
-            return "gola polo";
-            break;
-        case "cotton":
-            return "algodão";
-            break;
-        case "silk":
-            return "seda";
-            break;
-        case "polyester":
-            return "poliéster";
-            break;
-        default:
-            return "t-shirt";
+    if (linguaDestino === "ingles") {
+        return dict[nome];
+    } else if (linguaDestino === "portugues") {
+        const entries = Object.entries(dict); // gera um array de arrays chave-valor
+        const vetorInteresse = entries.find((entry) => entry.includes(nome)); // procura o array chave-valor que contem o nome
+        return vetorInteresse[0]; // retorna
     }
 }
 
 // tradução dos dados de um objeto
 function traduzObjeto(obj) {
     const listaTrad = [];
-    listaTrad.push(traduzNomeIngPort(obj.model));
-    listaTrad.push(traduzNomeIngPort(obj.neck));
-    listaTrad.push(traduzNomeIngPort(obj.material));
+    listaTrad.push(traduz(obj.model, "portugues"));
+    listaTrad.push(traduz(obj.neck, "portugues"));
+    listaTrad.push(traduz(obj.material, "portugues"));
 
     return listaTrad;
 }
@@ -462,7 +409,7 @@ function montarBlusa() {
         const textoSpan = divPai.querySelector("span").innerHTML;
         nomesItens.push(textoSpan);
     });
-    const nomesItensTraduzidos = nomesItens.map((n) => traduzNomePortIng(n));
+    const nomesItensTraduzidos = nomesItens.map((n) => traduz(n, "ingles"));
     const camiseta = {
                     "model": nomesItensTraduzidos[0], 
                     "neck": nomesItensTraduzidos[1], 
