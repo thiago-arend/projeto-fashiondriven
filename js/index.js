@@ -18,6 +18,9 @@ const cancelar = function() {
     const fundoModal = document.querySelector(".modal-fundo");
     localStorage.clear();
     fundoModal.style.display = "none";
+
+        // renderiza blusas
+        renderizaBlusas();
 }
 
 const confirmar = function() {
@@ -304,7 +307,6 @@ function removeEfeitosTextoGenerico(tipoMensagem) {
 
 // renderização do layout gerado ao receber erro de encomenda
 function renderizaErroPedido(mensagem) {
-    const link = document.querySelector("input");
     const container = document.querySelector(".conteudo");
     const conteudoAntes = container.innerHTML; // salva o conteudo anterior do container
     const conteudoLink = document.querySelector(".campo-link").value;
