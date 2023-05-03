@@ -271,10 +271,10 @@ function traduz(nome, linguaDestino) {
         "todos os modelos": "all", "t-shirt": "t-shirt"};
 
     if (linguaDestino === "ingles") {
-        return dict[nome];
+        return dict[nome.toLowerCase()];
     } else if (linguaDestino === "portugues") {
         const entries = Object.entries(dict); // gera um array de arrays chave-valor
-        const vetorInteresse = entries.find((entry) => entry.includes(nome)); // procura o array chave-valor que contem o nome
+        const vetorInteresse = entries.find((entry) => entry.includes(nome.toLowerCase())); // procura o array chave-valor que contem o nome
         return vetorInteresse[0]; // retorna
     }
 }
