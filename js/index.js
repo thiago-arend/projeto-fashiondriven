@@ -4,28 +4,10 @@ const urlGET = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
 const urlPOST = "https://mock-api.driven.com.br/api/v4/shirts-api/shirts";
 
 
-
 // ======== variáveis globais gerais ===========
 let userName;                                     // nome usuário
 let criterioFiltro = "all";                       // criterio do filtro começa setado em todos
 let idIntervaloMontarBlusa;                       // id do set intervalal para montar as blusas
-
-
-
-// ====== variaveis para listeners globais ==========
-const link = document.querySelector("input");        // input
-
-// pega o fundo e o modal
-const fundoModal = document.querySelector(".modal-fundo");
-const modal = document.querySelector(".modal-conteudo");
-
-// pega o botao confirmacao de encomenda
-const btnConfirm = document.querySelector(".confirma");
-
-// pega o botao de cancelar encomenda
-const btnCancel = document.querySelector(".cancela");
-
-
 
 // ========= listeners e funções anonimas globais =================
 // monitora teclado para atualizar layout do botao
@@ -33,11 +15,13 @@ const btnCancel = document.querySelector(".cancela");
 
 // cancelar e confirmar encomenda de outra pessoa
 const cancelar = function() {
+    const fundoModal = document.querySelector(".modal-fundo");
     localStorage.clear();
     fundoModal.style.display = "none";
 }
 
 const confirmar = function() {
+    const modal = document.querySelector(".modal-conteudo");
     // busca o objeto da local storage
     const objBlusa = JSON.parse(localStorage.getItem("pedido"));
     localStorage.clear();
@@ -82,15 +66,22 @@ const confirmar = function() {
     });
 }
 
+
+// pega o botao confirmacao de encomenda
+const btnConfirm = document.querySelector(".confirma");
+// pega o botao de cancelar encomenda
+const btnCancel = document.querySelector(".cancela");
+
 // adiciona função de confirmar e cancelar encomenda
 btnCancel.addEventListener("click", cancelar);
 btnConfirm.addEventListener("click", confirmar);
 
 
-
 // ======== funções de negócio ==============
 // encomenda de blusa de outra pessoa
 function encomendar(objBlusa) {
+    const modal = document.querySelector(".modal-conteudo");
+    const fundoModal = document.querySelector(".modal-fundo");
     // salva o objeto blusa em local storage
     localStorage.setItem("pedido", JSON.stringify(objBlusa));
 
@@ -169,6 +160,7 @@ function renderizaBlusas() {
 // função que monitora o status do botao de encomenda (se está liberado ou nao)
 function habilitaBotao() {
     console.log("chamou")
+    const link = document.querySelector("input");
     const botao = document.querySelector("button");   // button
 
     // validação da montagem da roupa
@@ -312,6 +304,7 @@ function removeEfeitosTextoGenerico(tipoMensagem) {
 
 // renderização do layout gerado ao receber erro de encomenda
 function renderizaErroPedido(mensagem) {
+    const link = document.querySelector("input");
     const container = document.querySelector(".conteudo");
     const conteudoAntes = container.innerHTML; // salva o conteudo anterior do container
     const conteudoLink = document.querySelector(".campo-link").value;
@@ -352,6 +345,7 @@ function renderizaErroPedido(mensagem) {
 
 // renderização do layout gerado ao receber sucesso de encomenda
 function renderizaSucessoPedido(urlImagem) {
+    const link = document.querySelector("input");
     const container = document.querySelector(".conteudo");
     const conteudoAntes = container.innerHTML; // salva o conteudo anterior do container
 
@@ -401,6 +395,7 @@ function renderizaSucessoPedido(urlImagem) {
 
 // montar blusa ao clicar no botao de criação de encomenda
 function montarBlusa() {
+    const link = document.querySelector("input");
     // dados para a requisição POST
     const itensSelecionados = document.querySelectorAll(".selecionado");
     const nomesItens = [];
